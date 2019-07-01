@@ -1,19 +1,3 @@
-/* Los pines 9, 10, 11, 12, 13; serán ocupados por el módulo RFID el cual al activarse activará "puertaGaraje" (pin 2)
-
-*/
-/*
-int puertaGaraje = 2;
-
-void setup() {
-  // put your setup code here, to run once:
-
-}
-
-void loop() {
-  // put your main code here, to run repeatedly:
-
-}*/
-
 #include <SPI.h>
 #include <MFRC522.h>
 #include <Servo.h>
@@ -23,15 +7,15 @@ void loop() {
 #define LED_G 7 // LED verde pin
 #define LED_R 8 // LED rojo
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Crea instancia MFRC522.
-Servo myServo; //Nombre de servo
+Servo puertaGaraje; //Nombre de servo
  
 void setup() 
 {
   Serial.begin(9600);   // Inicia comunicacion serial
   SPI.begin();      // Inicia  SPI bus
   mfrc522.PCD_Init();   // Inicia MFRC522
-  myServo.attach(3); //servo pin
-  myServo.write(0); //servo posicion inicial
+  puertaGaraje.attach(3); //servo pin
+  puertaGaraje.write(0); //servo posicion inicial
   pinMode(LED_G, OUTPUT);
   pinMode(LED_R, OUTPUT);
   Serial.println("Pase la tarjeta");
@@ -71,9 +55,9 @@ void loop()
     delay(500);
     digitalWrite(LED_G, HIGH);
     delay(300);
-    myServo.write(90);
+    puertaGaraje.write(90);
     delay(5000);
-    myServo.write(0);
+    puertaGaraje.write(0);
     digitalWrite(LED_G, LOW);
   }
  
