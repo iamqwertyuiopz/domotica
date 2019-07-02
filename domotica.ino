@@ -6,14 +6,14 @@
 
 static const int DHT_SENSOR_PIN = 6;
 DHT_nonblocking dht_sensor( DHT_SENSOR_PIN, DHT_SENSOR_TYPE );
- 
+
 #define SS_PIN 53
 #define RST_PIN 10
 #define LED_G 7 // LED verde pin
 #define LED_R 8 // LED rojo
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Crea instancia MFRC522.
 Servo puertaGaraje; //Nombre de servo
- 
+
 void setup() 
 {
   Serial.begin(9600);   // Inicia comunicacion serial
