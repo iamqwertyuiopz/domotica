@@ -108,4 +108,17 @@ void loop()
     delay(1000);
     digitalWrite(LED_R, LOW);
   }
+
+  if(esTalHora && algoSeMueve && estaOscuro || aplicacionManda){  //ESTA PORQUERIA ES PARA LA ESCALERA
+    enciendeLuz
+  }
+  if(esTalHora && estaOscuro){
+    enciendeLuzFueraDeLaCasa
+  }
+  if(aplicacionMandaSala){
+    Enciende luz sala
+  }
+  if(aplicacionMandaDormitorio1){
+    Enciende luz Dormitorio1
+  }
 } 
