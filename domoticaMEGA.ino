@@ -4,7 +4,8 @@
 #include <dht_nonblocking.h>
 #define DHT_SENSOR_TYPE DHT_TYPE_11
 
-static const int DHT_SENSOR_PIN = 6;
+
+static const int DHT_SENSOR_PIN = 33;
 DHT_nonblocking dht_sensor( DHT_SENSOR_PIN, DHT_SENSOR_TYPE );
 
 #define SS_PIN 53
@@ -12,26 +13,26 @@ DHT_nonblocking dht_sensor( DHT_SENSOR_PIN, DHT_SENSOR_TYPE );
 #define LED_G 7 // LED verde pin
 #define LED_R 8 // LED rojo
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Crea instancia MFRC522.
-Servo puertaGaraje; //Nombre de servo
+Servo puertaPrincipal; //Nombre de servo
 
 void setup() 
 {
-  Serial.begin(9600);   // Inicia comunicacion serial
   SPI.begin();      // Inicia  SPI bus
   mfrc522.PCD_Init();   // Inicia MFRC522
-  puertaGaraje.attach(3); //servo pin
-  puertaGaraje.write(0); //servo posicion inicial
+  puertaPrincipal.attach(3); //servo pin
+  puertaPrincipal.write(0); //servo posicion inicial
   pinMode(LED_G, OUTPUT);
   pinMode(LED_R, OUTPUT);
-  Serial.println("Pase la tarjeta");
-  Serial.println();
+  
+  Serial.begin(9600);
   pinMode(22,OUTPUT);
+    pinMode(13,OUTPUT);
 
 }
 static bool measure_environment( float *temperature, float *humidity ){
   static unsigned long measurement_timestamp = millis( );
 
-  /* Measure once every four seconds. */
+
   if( millis( ) - measurement_timestamp > 3000ul )
   {
     if( dht_sensor.measure( temperature, humidity ) == true )
@@ -49,8 +50,6 @@ void loop()
  float temperature;
   float humidity;
 
-  /* Measure temperature and humidity.  If the functions returns
-     true, then a measurement is available. */
   if( measure_environment( &temperature, &humidity ) == true )
   {
     Serial.print( "T = " );
@@ -59,10 +58,10 @@ void loop()
     Serial.print( humidity, 1 );
     Serial.println( "%" );
 
-    if (temperature > 26){
+    if (temperature > 20){
       digitalWrite(22,HIGH);
     }
-    else if( temperature<=26){
+    else {
       digitalWrite(22,LOW);
     }
   }
@@ -89,36 +88,34 @@ void loop()
   Serial.println();
   Serial.print("Mensaje : ");
   content.toUpperCase();
-  if (content.substring(1) == "26 EC 36 AC") //ID del tag con acceso
+  if (content.substring(1) == "26 EC 36 AC" || content.substring(1) == "FC B5 D3 D3") //ID del tag con acceso
   {
     Serial.println("Acceso Correcto");
     Serial.println();
     delay(500);
     digitalWrite(LED_G, HIGH);
     delay(300);
-    puertaGaraje.write(90);
+    puertaPrincipal.write(90);
     delay(5000);
-    puertaGaraje.write(0);
+    puertaPrincipal.write(0);
     digitalWrite(LED_G, LOW);
   }
  
  else   {
     Serial.println(" Acceso Denegado");
     digitalWrite(LED_R, HIGH);
-    delay(1000);
+    alarma();
     digitalWrite(LED_R, LOW);
   }
-
-  if(esTalHora && algoSeMueve && estaOscuro || aplicacionManda){  //ESTA PORQUERIA ES PARA LA ESCALERA
-    enciendeLuz
-  }
-  if(esTalHora && estaOscuro){
-    enciendeLuzFueraDeLaCasa
-  }
-  if(aplicacionMandaSala){
-    Enciende luz sala
-  }
-  if(aplicacionMandaDormitorio1){
-    Enciende luz Dormitorio1
-  }
-} 
+ 
+}
+void alarma(){
+  digitalWrite(13,HIGH);
+      delay(500);
+      digitalWrite(13,LOW);
+      delay(500);
+      digitalWrite(13,HIGH);
+      delay(500);
+      digitalWrite(13,LOW);
+      delay(500);
+}
