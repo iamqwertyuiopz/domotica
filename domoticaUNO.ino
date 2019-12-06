@@ -1,7 +1,7 @@
 #include <SoftwareSerial.h>
 
 SoftwareSerial BT(2, 3); // RX, TX
-int luzBalcon = 7;
+int luzBalcon = 5;
 int luzGaraje = 8;
 int luzSala = 13;
 int luzCuarto = 9; 
